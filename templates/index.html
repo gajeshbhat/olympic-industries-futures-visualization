@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Futures Data Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #myChart {
+            width: 80%;
+            margin: auto;
+        }
+    </style>
+    <script>
+        // Define a function to create the chart
+        function createChart(labels, values, chartType) {
+            var ctx = document.getElementById("myChart").getContext("2d");
+            var myChart = new Chart(ctx, {
+                type: chartType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Futures Data',
+                        data: values,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Futures Data Chart</h1>
+    <form method="GET">
+        <label for="column-select">Select chart column:</label>
+        <select id="column-select" name="columns">
+            {% for column in columns %}
+            <option value="{{ column }}" {% if column == selected_column %}selected{% endif %}>{{ column }}</option>
+            {% endfor %}
+        </select>
+        <label for="chart-type-select">Select chart type:</label>
+        <select id="chart-type-select" name="chart_type">
+            {% for chart_type in chart_types %}
+            <option value="{{ chart_type }}" {% if chart_type == selected_chart_type %}selected{% endif %}>{{ chart_type }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Update Chart</button>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+    <script>
+        // Call the createChart function with the chart data passed from the Flask backend
+        createChart({{ labels|tojson }}, {{ values|tojson }}, '{{ selected_chart_type }}');
+
+        // Add an event listener to re-draw the chart when the selected column or chart type changes
+        document.getElementById("columnSelect").addEventListener("change", function() {
+            window.location.href = "/?columns=" + this.value + "&chart_type={{ selected_chart_type }}";
+        });
+        document.getElementById("chartTypeSelect").addEventListener("change", function() {
+            window.location.href = "/?columns={{ selected_column }}&chart_type=" + this.value;
+        });
+    </script>
+</body>
+
+</html>
