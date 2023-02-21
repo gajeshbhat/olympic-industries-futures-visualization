@@ -11,6 +11,8 @@ def chart():
     selected_column = request.args.get("columns", "open")
 
     chart_data = read_data_from_db(selected_column)
+    print(chart_data["labels"])
+    print(type(chart_data["labels"]))
 
     return render_template(
         "index.html",

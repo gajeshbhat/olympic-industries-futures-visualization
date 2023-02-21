@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chart</title>
+    <title>Futures Data</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -44,18 +44,26 @@
     </style>
 </head>
 <body>
-    <h1>Chart</h1>
-    <form method="get" action="/">
+    <h1>Futures Data</h1>
+    <form method="get" action="/" onsubmit="updateChart(event)">
         <label for="columns">Select a column to display:</label>
         <select name="columns" id="columns">
             {% for column in columns %}
             <option value="{{ column }}" {% if column == selected_column %}selected{% endif %}>{{ column }}</option>
             {% endfor %}
         </select>
-        <button type="submit">Update Chart</button>
     </form>
     <canvas id="chart"></canvas>
+    <div id="slider"></div>
     <script>
+        function updateChart(event) {
+            event.preventDefault();
+            var columnSelect = document.getElementById("columns");
+            var selectedColumn = columnSelect.options[columnSelect.selectedIndex].value;
+            var url = window.location.origin + window.location.pathname + '?columns=' + selectedColumn;
+            window.location.href = url;
+        }
+
         var ctx = document.getElementById('chart').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -64,9 +72,10 @@
                 datasets: [{
                     label: '{{ selected_column }}',
                     data: {{ values | tojson }},
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
+                    fill: true,
+                    borderColor: '#49c079',
+                    backgroundColor: '#F0EEED',
+                    borderWidth: 0.8
                 }]
             },
             options: {
@@ -78,6 +87,11 @@
                     }]
                 }
             }
+        });
+
+        var columnSelect = document.getElementById("columns");
+        columnSelect.addEventListener("change", function() {
+            updateChart(event);
         });
     </script>
 </body>
