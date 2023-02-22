@@ -3,48 +3,10 @@
 <head>
     <title>Futures Data</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: sans-serif;
-        }
-        h1 {
-            text-align: center;
-        }
-        form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        label {
-            margin-right: 1rem;
-        }
-        select {
-            margin-right: 1rem;
-        }
-        button {
-            padding: 0.5rem 1rem;
-            border: 1px solid #ccc;
-            border-radius: 0.25rem;
-            background-color: #fff;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #eee;
-        }
-        button:active {
-            background-color: #ddd;
-        }
-        canvas {
-            width: 100%;
-            max-width: 800px;
-            height: 400px;
-            margin: 0 auto;
-        }
-    </style>
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-    <h1>Futures Data</h1>
+    <h1>Lumbers Futures Data</h1>
     <form method="get" action="/" onsubmit="updateChart(event)">
         <label for="columns">Select a column to display:</label>
         <select name="columns" id="columns">
@@ -54,16 +16,8 @@
         </select>
     </form>
     <canvas id="chart"></canvas>
-    <div id="slider"></div>
     <script>
-        function updateChart(event) {
-            event.preventDefault();
-            var columnSelect = document.getElementById("columns");
-            var selectedColumn = columnSelect.options[columnSelect.selectedIndex].value;
-            var url = window.location.origin + window.location.pathname + '?columns=' + selectedColumn;
-            window.location.href = url;
-        }
-
+        // Create chart
         var ctx = document.getElementById('chart').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -93,6 +47,15 @@
         columnSelect.addEventListener("change", function() {
             updateChart(event);
         });
+        
+        // Update chart when a new column is selected
+        function updateChart(event) {
+            event.preventDefault();
+            var columnSelect = document.getElementById("columns");
+            var selectedColumn = columnSelect.options[columnSelect.selectedIndex].value;
+            var url = window.location.origin + window.location.pathname + '?columns=' + selectedColumn;
+            window.location.href = url;
+        }
     </script>
 </body>
 </html>
