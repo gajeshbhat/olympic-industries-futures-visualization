@@ -16,7 +16,9 @@ def create_db_if_not_exists():
         )
         futures_data = read_data_from_excel()
 
-        futures_data.to_sql("futures_data_default", conn, if_exists="replace", index=False)
+        futures_data.to_sql(
+            "futures_data_default", conn, if_exists="replace", index=False
+        )
 
         # Close the database connection
         conn.close()
@@ -38,7 +40,7 @@ def read_data_from_db(column):
     values = data[column].tolist()
     columns = ["open", "high", "low", "close", "adj_close", "volume"]
 
-     # Close the database connection
+    # Close the database connection
     conn.close()
 
     # List of supported chart types for the data
@@ -59,6 +61,7 @@ def clean_data(futures_data):
         for column in futures_data.columns
     ]
     return futures_data
+
 
 # Read the futures data from the Excel file and store it in the database
 def read_data_from_excel():
